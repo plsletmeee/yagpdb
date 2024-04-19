@@ -1,0 +1,21 @@
+# Dockerfile file for:
+# - release
+# - master
+FROM alpine:latest
+
+WORKDIR /app
+VOLUME /app/soundboard \
+  /app/cert
+EXPOSE 80 443
+
+# Compatibility fix is now in the docker-entrypoint.sh
+
+# Directories have been constructed in Pipeline
+COPY / /
+
+RUN apk --no-cache upgrade; \
+  apk --no-cache add ca-certificates ffmpeg tzdata; \
+  chmod 0755 /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD []
